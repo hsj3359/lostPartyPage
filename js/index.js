@@ -6,7 +6,7 @@ function partyClear() {
     var modalTile = document.getElementById("partyModalTitle").innerText
     var bossName = getSendBossName(modalTile)
     var partyNum = modalTile.slice(modalTile.length - 3, modalTile.length - 2)
-    fetch("http://127.0.0.1:5000/clearGET/?bossName=" + bossName + "&partyNum=" + partyNum).then((response) => response.json())
+    fetch("https://3359jun.pythonanywhere.com/clearGET/?bossName=" + bossName + "&partyNum=" + partyNum).then((response) => response.json())
         .then((data) => console.log(data));
 }
 
@@ -53,7 +53,7 @@ function viewPartyModal(selectRow) {
     }
 
     console.log(partyModalBody)
-    fetch("http://127.0.0.1:5000/searchParty/?bossName=" + selectRow.id + "&partyNum=" + selectRow.cells[2].getAttribute("id")).then((response) => response.json())
+    fetch("https://3359jun.pythonanywhere.com/searchParty/?bossName=" + selectRow.id + "&partyNum=" + selectRow.cells[2].getAttribute("id")).then((response) => response.json())
         .then((data) => createPartyModalBody(data, partyModalBody));
 }
 
@@ -76,7 +76,7 @@ function createPartyModalBody(data, bodyObject) {
 function addUser() {
     var name = document.getElementById("inputAddUser").value
     console.log(name)
-    fetch("http://127.0.0.1:5000/addUser/" + name).then((response) => response.json())
+    fetch("https://3359jun.pythonanywhere.com/addUser/" + name).then((response) => response.json())
         .then((data) => { if (data == "0") { console.log("실패") } else { "성공" } });
 
 }
@@ -140,7 +140,7 @@ function makeOption(selectObject) {
         select.setAttribute("onchange", "changeMakeSelect(this)")
         select.setAttribute("id", "" + num)
         body.appendChild(select)
-        fetch("http://127.0.0.1:5000/searchCreatePartyMember/?bossName=" + bossName + "&bossLevel1=" + bossLevel[num][0] + "&bossLevel2=" + bossLevel[num][1]).then((response) => response.json())
+        fetch("https://3359jun.pythonanywhere.com/searchCreatePartyMember/?bossName=" + bossName + "&bossLevel1=" + bossLevel[num][0] + "&bossLevel2=" + bossLevel[num][1]).then((response) => response.json())
             .then((data) => makeSelect(select, data));
     }
 
@@ -155,6 +155,7 @@ function changeBossName(bossName) {
 }
 
 function createTable(data) {
+    console.log(data)
     table = document.getElementById("partyTable")
     for (var i = 0; i < data.length; i++) {
         row = table.insertRow()
@@ -213,7 +214,7 @@ function saveParty() {
         }
         console.log(textData.replace(" ", ""))
         console.log(document.getElementById("makeDate").value)
-        fetch("http://127.0.0.1:5000/createPartyGet/?bossName=" + bossName + "&userName=" + textData + "&date=" + document.getElementById("makeDate").value).then((response) => response.json())
+        fetch("https://3359jun.pythonanywhere.com/createPartyGet/?bossName=" + bossName + "&userName=" + textData + "&date=" + document.getElementById("makeDate").value).then((response) => response.json())
             .then((data) => console.log("성공"));
     }
 
@@ -233,8 +234,8 @@ function createMember(data) {
         container.appendChild(line)
     }
 }
-fetch("http://127.0.0.1:5000/userData").then((response) => response.json())
+fetch("https://3359jun.pythonanywhere.com/userData").then((response) => response.json())
     .then((data) => createMember(data));
 
-fetch("http://127.0.0.1:5000/party").then((response) => response.json())
+fetch("https://3359jun.pythonanywhere.com/partyReserVation").then((response) => response.json())
     .then((data) => createTable(data));
