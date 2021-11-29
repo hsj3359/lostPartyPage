@@ -51,6 +51,9 @@ function viewPartyModal(selectRow) {
     if (selectRow.cells[2].getAttribute("id") > 99) {
         document.getElementById("partyModalButton").style.display = "none"
     }
+    else {
+        document.getElementById("partyModalButton").style.display = "block"
+    }
 
     console.log(partyModalBody)
     fetch("https://3359jun.pythonanywhere.com/searchParty/?bossName=" + selectRow.id + "&partyNum=" + selectRow.cells[2].getAttribute("id")).then((response) => response.json())
@@ -155,7 +158,6 @@ function changeBossName(bossName) {
 }
 
 function createTable(data) {
-    console.log(data)
     table = document.getElementById("partyTable")
     for (var i = 0; i < data.length; i++) {
         row = table.insertRow()
@@ -166,16 +168,15 @@ function createTable(data) {
         cell2 = row.insertCell()
         cell2.innerHTML = changeBossName(data[i][0])
         cell3 = row.insertCell()
-        if (data[i][1] > 99) {
-            cell3.innerHTML = "완료"
-
-        }
-        else {
-            cell3.innerHTML = data[i][1]
-
-        }
-
+        if (data[i][1] > 99) { cell3.innerHTML = "완료" }
+        else { cell3.innerHTML = data[i][1] }
         cell3.setAttribute("id", data[i][1])
+
+        var select = document.getElementById("partyModifySelect")
+        var option = document.createElement("option")
+        option.innerHTML = findBossNameForKor(data[i][0]) + " " + data[i][1] + "파티"
+        option.setAttribute('id', '' + data[i][1])
+        select.appendChild(option)
 
     }
 
@@ -234,6 +235,23 @@ function createMember(data) {
         container.appendChild(line)
     }
 }
+
+function makeModify(data) {
+    var select = document.createElement("select")
+    document.getElementById(modifyPartyMember).appendChild(select)
+    for (var i = 0; i < data.length; i++) {
+
+
+    }
+}
+
+function partyModify(selectObject) {
+    fetch("https://3359jun.pythonanywhere.com/searchParty/?bossName=" + getSendBossName(selectObject.options[selectObject.selectedIndex].value) + "&partyNum=" + selectObject.options[selectObject.selectedIndex].id).then((response) => response.json())
+        .then((data) => console.log(data));
+
+
+}
+
 fetch("https://3359jun.pythonanywhere.com/userData").then((response) => response.json())
     .then((data) => createMember(data));
 
